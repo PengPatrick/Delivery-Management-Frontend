@@ -1,6 +1,6 @@
-import React from 'react';
-import {GoogleMap, LoadScript, Marker, useLoadScript, useJsApiLoader} from '@react-google-maps/api';
-import { Loader } from '@googlemaps/js-api-loader';
+import {React, useEffect} from 'react';
+import {GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
+
 
 
 const containerStyle = {
@@ -13,7 +13,7 @@ const center = {
     lng: -122.45591064927576
 };
 
-const position = [
+const positions = [
 
     {
         lat: 37.72380320461962,
@@ -60,14 +60,22 @@ function OrderMap(props) {
     //     libraries: ["places"]
     // });
 
+    const {senderPos} = props
+
+    // DidUpdate:
+    useEffect( () => {
+
+
+    }, [props.senderPos])
+
 
     return (
 
         <div>
-            <LoadScript
-                googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}
+            {/*<LoadScript*/}
+            {/*    googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}*/}
 
-            >
+            {/*>*/}
 
                 <GoogleMap
                     mapContainerStyle={containerStyle}
@@ -91,20 +99,28 @@ function OrderMap(props) {
                     {/*</Marker>*/}
                     <Marker
                         icon={robotIcon}
-                        position={position[0]}
+                        position={positions[0]}
                     />
                     <Marker
                         icon={robotIcon}
-                        position={position[1]}
+                        position={positions[1]}
                     />
                     <Marker
                         icon={robotIcon}
-                        position={position[2]}
+                        position={positions[2]}
                     />
 
-
+                    {
+                        Object.keys(senderPos).length === 0?
+                            null
+                            :
+                            <Marker
+                                icon={robotIcon}
+                                position={senderPos}
+                            />
+                    }
                 </GoogleMap>
-            </LoadScript>
+            {/*</LoadScript>*/}
 
         </div>
 

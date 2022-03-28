@@ -21,6 +21,8 @@ const { Option } = Select;
 
 function CustomerForm(props) {
 
+    const {setSenderPos} = props
+
     const {
         ready,
         value,
@@ -53,9 +55,14 @@ function CustomerForm(props) {
 
             // Get latitude and longitude via utility functions
             getGeocode({ address: description })
-                .then((results) => getLatLng(results[0]))
+                .then( (results) => getLatLng(results[0])
+                )
                 .then(({ lat, lng }) => {
                     console.log("📍 Coordinates: ", { lat, lng });
+                    setSenderPos({
+                        lat: lat,
+                        lng: lng
+                    })
                 })
                 .catch((error) => {
                     console.log("😱 Error: ", error);
@@ -164,14 +171,16 @@ function CustomerForm(props) {
                     }]
                 }
             >
+                <div>
+                    <Input
+                        value={value}
+                        onChange={handleInput}
+                        disabled={!ready}
+                        placeholder="Please Input your Address"
+                    />
+                    {status === "OK" && <ul>{renderSuggestions()}</ul>}
+                </div>
 
-                <Input
-                    value={value}
-                    onChange={handleInput}
-                    disabled={!ready}
-                    placeholder="Please Input your Address"
-                />
-                {status === "OK" && <ul>{renderSuggestions()}</ul>}
             </Form.Item>
 
 
