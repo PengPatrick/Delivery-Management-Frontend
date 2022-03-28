@@ -1,8 +1,7 @@
 import React from 'react';
 import {GoogleMap, LoadScript, Marker, useLoadScript, useJsApiLoader} from '@react-google-maps/api';
-import {GOOGLE_API_KEY} from "../constants";
-import {robot_icon} from '../assets/images/robot_icon.svg'
 import { Loader } from '@googlemaps/js-api-loader';
+
 
 const containerStyle = {
     width: '600px',
@@ -50,10 +49,10 @@ function OrderMap(props) {
     //     libraries,
     // })
 
-    const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY
-        // ...otherOptions
-    })
+    // const { isLoaded, loadError } = useJsApiLoader({
+    //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY
+    //     // ...otherOptions
+    // })
 
     // const loader = new Loader({
     //     apiKey: "",
