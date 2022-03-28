@@ -23,11 +23,11 @@ function CreateOrder(props) {
     <div id='create-order'>
         <Row gutter={16} justify={'center'}>
             <Col span={10}>
-                <CustomerForm setSenderPos={onSelectedNewPosition}/>
+                <CustomerForm onSelect={onSelectedNewPosition}/>
             </Col>
 
             <Col span={10}>
-                <OrderMap senderPos={senderPos}/>
+                <OrderMap senderPos={senderPos} center={center}/>
             </Col>
         </Row>
 

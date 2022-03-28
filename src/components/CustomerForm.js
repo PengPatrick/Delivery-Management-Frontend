@@ -21,7 +21,7 @@ const { Option } = Select;
 
 function CustomerForm(props) {
 
-    const {setSenderPos} = props
+    const {onSelect} = props
 
     const {
         ready,
@@ -46,6 +46,7 @@ function CustomerForm(props) {
         setValue(e.target.value);
     };
 
+
     const handleSelect = ({ description }) =>
         () => {
             // When user selects a place, we can replace the keyword without request data from API
@@ -59,7 +60,7 @@ function CustomerForm(props) {
                 )
                 .then(({ lat, lng }) => {
                     console.log("📍 Coordinates: ", { lat, lng });
-                    setSenderPos({
+                    onSelect({
                         lat: lat,
                         lng: lng
                     })
@@ -171,7 +172,7 @@ function CustomerForm(props) {
                     }]
                 }
             >
-                <div>
+                <div ref={ref}>
                     <Input
                         value={value}
                         onChange={handleInput}
