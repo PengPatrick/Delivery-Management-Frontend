@@ -1,18 +1,22 @@
-import OrderMap from "./OrderMap";
 import CreateOrder from "./CreateOrder";
 import {Row, Col} from 'antd';
+import { Loader } from '@googlemaps/js-api-loader';
+import { useLoadScript} from '@react-google-maps/api';
 
-
-const style = { background: '#0092ff', padding: '8px 0' };
-
-
+const libraries = ['places']
 function App() {
-  return (
+    const {isLoaded} = useLoadScript({
+        googleMapsApiKey: process.env["REACT_APP_GOOGLE_API_KEY"],
+        libraries: libraries
+    })
 
+    if(!isLoaded){
+        return <div>Loading....</div>
+    }
+
+    return (
         <CreateOrder/>
-
-
-  );
+    );
 }
 
 export default App;
