@@ -1,8 +1,11 @@
 import {React,useState} from 'react';
-import CustomerForm from "./CustomerForm";
+import OrderForm1 from "./OrderForm1";
 import OrderMap from "./OrderMap";
-
 import {Row, Col} from 'antd';
+import {Switch, Route, Redirect} from "react-router-dom";
+import OrderForm2 from './OrderForm2';
+import OrderForm3 from './OrderForm3';
+import OrderForm4 from './OrderForm4';
 
 function CreateOrder(props) {
 
@@ -11,6 +14,12 @@ function CreateOrder(props) {
             lat: 37.72380320461962,
             lng: -122.45591064927576
     })
+    const [highlightedStation, setHighlightedStation] = useState(-1)
+
+    // const {isLoggedIn} = props
+
+    // todo: fake loggedIn Status
+    const isLoggedIn = true
 
     const onSelectedNewPosition = (pos) => {
         setSenderPos(pos);
@@ -19,15 +28,57 @@ function CreateOrder(props) {
 
     // console.log(window.google)
 
+    const showPageOne = () => {
+        return (
+            isLoggedIn?
+                (<OrderForm1 onSelectPos={onSelectedNewPosition} setHighlightedStation={setHighlightedStation}/>)
+                :
+                (<Redirect to="/home"/>)
+        )
+    }
+
+    const showPageTwo = () => {
+        return (
+            isLoggedIn?
+                (<OrderForm2 />)
+                :
+                (<Redirect to="/home"/>)
+        )
+    }
+
+    const showPageThree = () => {
+        return (
+            isLoggedIn?
+                (<OrderForm3 />)
+                :
+                (<Redirect to="/home"/>)
+        )
+    }
+
+    const showPageFour = () => {
+        return (
+            isLoggedIn?
+                (<OrderForm4 />)
+                :
+                (<Redirect to="/home"/>)
+        )
+    }
+
     return (
     <div id='create-order'>
         <Row gutter={16} justify={'center'}>
             <Col span={10}>
-                <CustomerForm onSelectPos={onSelectedNewPosition}/>
+                <Switch>
+                    <Route path='/create-order/page/1' render={showPageOne}/>
+                    <Route path='/create-order/page/2' render={showPageTwo}/>
+                    <Route path='/create-order/page/3' render={showPageThree}/>
+                    <Route path='/create-order/page/4' render={showPageFour}/>
+                </Switch>
+
             </Col>
 
             <Col span={10}>
-                <OrderMap senderPos={senderPos} center={center}/>
+                <OrderMap senderPos={senderPos} center={center} highlightedStation={highlightedStation}/>
             </Col>
         </Row>
 

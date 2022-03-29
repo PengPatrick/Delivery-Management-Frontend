@@ -1,6 +1,5 @@
 import CreateOrder from "./CreateOrder";
 import {Row, Col} from 'antd';
-import { Loader } from '@googlemaps/js-api-loader';
 import { useLoadScript} from '@react-google-maps/api';
 
 const libraries = ['places']
