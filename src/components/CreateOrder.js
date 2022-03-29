@@ -17,17 +17,17 @@ function CreateOrder(props) {
         setCenter(pos)
     }
 
-    console.log(window.google)
+    // console.log(window.google)
 
     return (
     <div id='create-order'>
         <Row gutter={16} justify={'center'}>
             <Col span={10}>
-                <CustomerForm setSenderPos={onSelectedNewPosition}/>
+                <CustomerForm onSelectPos={onSelectedNewPosition}/>
             </Col>
 
             <Col span={10}>
-                <OrderMap senderPos={senderPos}/>
+                <OrderMap senderPos={senderPos} center={center}/>
             </Col>
         </Row>
 
