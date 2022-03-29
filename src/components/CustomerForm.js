@@ -136,11 +136,11 @@ function CustomerForm(props) {
     );
 
     // DidUpdate
-    // useEffect(() => {
-    //     if(status === 'OK') {
-    //
-    //     }
-    // }, [status])
+    useEffect(() => {
+        if(status === 'OK') {
+            onSearch(document.getElementById('autocomplete').value)
+        }
+    }, [status])
 
     return (
 
@@ -231,7 +231,7 @@ function CustomerForm(props) {
 
                     {/*{ status === 'OK' &&*/}
                         <AutoComplete
-
+                            id={'autocomplete'}
                             value={value}
                             options={options}
                             disabled={!ready}
