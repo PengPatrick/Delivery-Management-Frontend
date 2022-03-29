@@ -43,6 +43,7 @@ function CustomerForm(props) {
 
     const handleInput = (e) => {
         // Update the keyword of the input element
+        console.log('handleInput: ' + e)
         setValue(e.target.value);
     };
 
