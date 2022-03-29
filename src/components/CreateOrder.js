@@ -16,10 +16,14 @@ function CreateOrder(props) {
     })
     const [highlightedStation, setHighlightedStation] = useState(-1)
 
+    // todo: login status from main
     // const {isLoggedIn} = props
-
     // todo: fake loggedIn Status
     const isLoggedIn = true
+
+    // todo: default method selected
+    // const {shipMethod} = props
+    const shipMethod = 'Robot'
 
     const onSelectedNewPosition = (pos) => {
         setSenderPos(pos);
@@ -40,7 +44,7 @@ function CreateOrder(props) {
     const showPageTwo = () => {
         return (
             isLoggedIn?
-                (<OrderForm2 />)
+                (<OrderForm2 shipMethod={shipMethod}/>)
                 :
                 (<Redirect to="/home"/>)
         )
