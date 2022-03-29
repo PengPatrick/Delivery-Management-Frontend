@@ -79,9 +79,16 @@ function CustomerForm(props) {
             } = suggestion;
 
             return (
-                <li key={place_id} onClick={handleSelect(suggestion)}>
-                    <strong>{main_text}</strong> <small>{secondary_text}</small>
-                </li>
+                // <div key={place_id} onClick={handleSelect(suggestion)} className={'autocomplete-item'}>
+                //     <strong>{main_text}</strong> <small>{secondary_text}</small>
+                // </div>
+
+                <div key={place_id} onClick={handleSelect(suggestion)} className={'autocomplete-item'}>
+
+                    {/*<Input value={main_text + secondary_text}/>*/}
+                    <span> {main_text} </span>
+                    <span> {secondary_text} </span>
+                </div>
             );
         });
 
@@ -180,7 +187,8 @@ function CustomerForm(props) {
                         disabled={!ready}
                         placeholder="Please Input your Address"
                     />
-                    {status === "OK" && <ul>{renderSuggestions()}</ul>}
+                    {status === "OK" && <div className={'autocomplete-box'}>{renderSuggestions()}</div>}
+                    {/*{status === "OK" && <div className={'autocomplete-box'}> {renderSuggestions()} </div>}*/}
                 </div>
 
             </Form.Item>

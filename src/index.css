@@ -1,6 +1,7 @@
 @import '~antd/dist/antd.css';
 @import 'styles/App.css';
 @import 'styles/CreateOrder.css';
+@import "styles/CustomerForm.css";
 
 body {
   margin: 0;
