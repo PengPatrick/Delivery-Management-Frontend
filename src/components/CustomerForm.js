@@ -21,7 +21,8 @@ const { Option } = Select;
 
 function CustomerForm(props) {
 
-    const {onSelect} = props
+    const {onSelectPos} = props
+    const [options, setOptions] = useState([])
 
     const {
         ready,
@@ -35,6 +36,7 @@ function CustomerForm(props) {
         },
         debounce: 300,
     });
+
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
         // the searched suggestions by calling this method
@@ -46,7 +48,6 @@ function CustomerForm(props) {
         console.log('handleInput: ' + e)
         setValue(e.target.value);
     };
-
 
     const handleSelect = ({ description }) =>
         () => {
@@ -61,7 +62,7 @@ function CustomerForm(props) {
                 )
                 .then(({ lat, lng }) => {
                     console.log("📍 Coordinates: ", { lat, lng });
-                    onSelect({
+                    onSelectPos({
                         lat: lat,
                         lng: lng
                     })
@@ -71,27 +72,60 @@ function CustomerForm(props) {
                 });
         };
 
-    const renderSuggestions = () =>
-        data.map((suggestion) => {
-            const {
-                place_id,
-                structured_formatting: { main_text, secondary_text },
-            } = suggestion;
+    // const renderSuggestions = () =>
+    //     data.map((suggestion) => {
+    //         const {
+    //             place_id,
+    //             structured_formatting: { main_text, secondary_text },
+    //         } = suggestion;
+    //
+    //         console.log(suggestion)
+    //
+    //         return (
+    //             <li key={place_id} onClick={handleSelect(suggestion)}>
+    //                 <strong>{main_text}</strong> <small>{secondary_text}</small>
+    //             </li>
+    //         );
+    //     });
 
-            return (
-                // <div key={place_id} onClick={handleSelect(suggestion)} className={'autocomplete-item'}>
-                //     <strong>{main_text}</strong> <small>{secondary_text}</small>
-                // </div>
+    const onChange = (data) => {
+        console.log('on change:' + data)
+        setValue(data)
+    }
 
-                <div key={place_id} onClick={handleSelect(suggestion)} className={'autocomplete-item'}>
+    const onSearch = (searchText) => {
+        console.log('on search: ' + searchText)
 
-                    {/*<Input value={main_text + secondary_text}/>*/}
-                    <span> {main_text} </span>
-                    <span> {secondary_text} </span>
-                </div>
-            );
-        });
+        // while(status !== 'OK') {}
 
+        console.log('data:' + data)
+        const list = data.map(
+            (suggestion) => {
+                const {
+                    place_id,
+                    structured_formatting: { main_text, secondary_text },
+                } = suggestion;
+
+                console.log(suggestion)
+
+                return {
+                    value: main_text + ', ' + secondary_text,
+                    label: (
+                        <li key={place_id} onClick={handleSelect(suggestion)}>
+                        <strong>{main_text}</strong> <small>{secondary_text}</small>
+                        </li>)
+                };
+            }
+        )
+
+        console.log(list)
+
+        setOptions(!searchText? []: list)
+    }
+
+    // const onSelect = (data) => {
+    //     console.log('onSelect', data);
+    // }
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -102,7 +136,12 @@ function CustomerForm(props) {
         </Form.Item>
     );
 
-
+    // DidUpdate
+    useEffect(() => {
+        if(status === 'OK') {
+            onSearch(document.getElementById('autocomplete').value)
+        }
+    }, [status])
 
     return (
 
@@ -180,20 +219,35 @@ function CustomerForm(props) {
                     }]
                 }
             >
+                {/*<div ref={ref}>*/}
+                {/*    <Input*/}
+                {/*        value={value}*/}
+                {/*        onChange={handleInput}*/}
+                {/*        disabled={!ready}*/}
+                {/*        placeholder="Please Input your Address"*/}
+                {/*    />*/}
+                {/*    {status === "OK" && <menu>{renderSuggestions()}</menu>}*/}
+                {/*</div>*/}
                 <div ref={ref}>
-                    <Input
-                        value={value}
-                        onChange={handleInput}
-                        disabled={!ready}
-                        placeholder="Please Input your Address"
-                    />
-                    {status === "OK" && <div className={'autocomplete-box'}>{renderSuggestions()}</div>}
-                    {/*{status === "OK" && <div className={'autocomplete-box'}> {renderSuggestions()} </div>}*/}
+
+                    {/*{ status === 'OK' &&*/}
+                        <AutoComplete
+                            id={'autocomplete'}
+                            value={value}
+                            options={options}
+                            disabled={!ready}
+                            // onSelect={onSelect}
+                            onSearch={onSearch}
+                            onChange={onChange}
+                        >
+
+                        </AutoComplete>
+                    {/*}*/}
+
                 </div>
 
+
             </Form.Item>
-
-
 
         </Form>
 
