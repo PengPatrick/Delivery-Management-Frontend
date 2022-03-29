@@ -95,6 +95,8 @@ function CustomerForm(props) {
     const onSearch = (searchText) => {
         console.log('on search: ' + searchText)
 
+        // while(status !== 'OK') {}
+
         console.log('data:' + data)
         const list = data.map(
             (suggestion) => {
@@ -120,9 +122,9 @@ function CustomerForm(props) {
         setOptions(!searchText? []: list)
     }
 
-    const onSelect = (data) => {
-        console.log('onSelect', data);
-    }
+    // const onSelect = (data) => {
+    //     console.log('onSelect', data);
+    // }
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -133,7 +135,12 @@ function CustomerForm(props) {
         </Form.Item>
     );
 
-
+    // DidUpdate
+    // useEffect(() => {
+    //     if(status === 'OK') {
+    //
+    //     }
+    // }, [status])
 
     return (
 
@@ -221,17 +228,20 @@ function CustomerForm(props) {
                 {/*    {status === "OK" && <menu>{renderSuggestions()}</menu>}*/}
                 {/*</div>*/}
                 <div ref={ref}>
-                    <AutoComplete
 
-                        value={value}
-                        options={options}
-                        disabled={!ready}
-                        // onSelect={onSelect}
-                        // onSearch={onSearch}
-                        onChange={onChange}
-                    >
+                    {/*{ status === 'OK' &&*/}
+                        <AutoComplete
 
-                    </AutoComplete>
+                            value={value}
+                            options={options}
+                            disabled={!ready}
+                            // onSelect={onSelect}
+                            onSearch={onSearch}
+                            onChange={onChange}
+                        >
+
+                        </AutoComplete>
+                    {/*}*/}
 
                 </div>
 
