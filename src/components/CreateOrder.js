@@ -1,4 +1,4 @@
-import {React,useState} from 'react';
+import {React, useEffect, useState} from 'react';
 import OrderForm1 from "./OrderForm1";
 import OrderMap from "./OrderMap";
 import {Row, Col} from 'antd';
@@ -9,6 +9,16 @@ import OrderForm4 from './OrderForm4';
 
 function CreateOrder(props) {
 
+    // todo: login status from main
+    // const {isLoggedIn} = props
+    // todo: fake loggedIn Status
+    const isLoggedIn = true
+
+    // todo: default method selected
+    // const {shipMethod} = props
+    const shipMethod = 'Robot'
+
+
     const [senderPos, setSenderPos] = useState({})
     const [center, setCenter] = useState({
             lat: 37.72380320461962,
@@ -18,14 +28,11 @@ function CreateOrder(props) {
 
     const [destPos, setDestPos] = useState({})
 
-    // todo: login status from main
-    // const {isLoggedIn} = props
-    // todo: fake loggedIn Status
-    const isLoggedIn = true
+    const [info, setInfo] = useState({
+        'prefix': 1,
+        'ship_method': shipMethod
+    })
 
-    // todo: default method selected
-    // const {shipMethod} = props
-    const shipMethod = 'Robot'
 
     const onSelectedSenderPos = (pos) => {
         setSenderPos(pos);
@@ -41,7 +48,12 @@ function CreateOrder(props) {
     const showPageOne = () => {
         return (
             isLoggedIn?
-                (<OrderForm1 onSelectedSenderPos={onSelectedSenderPos} setHighlightedStation={setHighlightedStation}/>)
+                (<OrderForm1
+                    onSelectedSenderPos={onSelectedSenderPos}
+                    setHighlightedStation={setHighlightedStation}
+                    info={info}
+                    setInfo={setInfo}
+                />)
                 :
                 (<Redirect to="/home"/>)
         )
@@ -50,7 +62,11 @@ function CreateOrder(props) {
     const showPageTwo = () => {
         return (
             isLoggedIn?
-                (<OrderForm2 shipMethod={shipMethod}/>)
+                (<OrderForm2
+                    shipMethod={shipMethod}
+                    info={info}
+                    setInfo={setInfo}
+                />)
                 :
                 (<Redirect to="/home"/>)
         )
@@ -59,7 +75,11 @@ function CreateOrder(props) {
     const showPageThree = () => {
         return (
             isLoggedIn?
-                (<OrderForm3 onSelectedDestPos={onSelectedDestPos}/>)
+                (<OrderForm3
+                    onSelectedDestPos={onSelectedDestPos}
+                    info={info}
+                    setInfo={setInfo}
+                />)
                 :
                 (<Redirect to="/home"/>)
         )
@@ -68,11 +88,24 @@ function CreateOrder(props) {
     const showPageFour = () => {
         return (
             isLoggedIn?
-                (<OrderForm4 />)
+                (<OrderForm4
+                    info={info}
+                    setInfo={setInfo}
+                />)
                 :
                 (<Redirect to="/home"/>)
         )
     }
+
+    // note: Did Mount
+    useEffect( ()=> {
+        console.log('CreateOrder Did Mount.')
+    }, [])
+
+    // note: Did Update
+    useEffect( () => {
+        console.log('CreateOrder Did Update.')
+    }, [props, ])
 
     return (
     <div id='create-order'>
