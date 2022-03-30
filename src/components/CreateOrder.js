@@ -75,11 +75,21 @@ function CreateOrder(props) {
     const showPageThree = () => {
         return (
             isLoggedIn?
-                (<OrderForm3
-                    onSelectedDestPos={onSelectedDestPos}
-                    info={info}
-                    setInfo={setInfo}
-                />)
+                (
+                    <div>
+
+                        <OrderForm3
+                            onSelectedDestPos={onSelectedDestPos}
+                            info={info}
+                            setInfo={setInfo}
+                        />
+                        {/*<OrderMap*/}
+                        {/*    senderPos={senderPos}*/}
+                        {/*    center={center}*/}
+                        {/*    highlightedStation={highlightedStation}*/}
+                        {/*    destPos={destPos}*/}
+                        {/*/>*/}
+                    </div>)
                 :
                 (<Redirect to="/home"/>)
         )
