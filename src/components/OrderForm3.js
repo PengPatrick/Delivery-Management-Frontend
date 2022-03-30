@@ -1,19 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {AutoComplete, Button, Col, Form, Input, Row, Select} from "antd";
+import {AutoComplete, Button, Col, Form, Input, InputNumber, Row, Select} from "antd";
 import {LeftCircleOutlined, RightCircleOutlined} from "@ant-design/icons";
 import usePlacesAutocomplete, {getGeocode, getLatLng} from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
 import {useHistory} from "react-router-dom";
+import {assignIn} from "lodash/object";
 
 const { Option } = Select;
 
 function OrderForm3(props) {
 
-    const {onSelectedDestPos} = props
+    const {onSelectedReceiverPos, info, setInfo} = props
     const [options, setOptions] = useState([])
-    const history = useHistory()
 
-    // note: autocomplete
+    const history = useHistory()
+    const [form] = Form.useForm()
+
     const {
         ready,
         value,
@@ -33,10 +35,11 @@ function OrderForm3(props) {
         clearSuggestions();
     });
 
-    const handleSelect = ({ description }) =>
+    const handleSelect = ({ description}) =>
         () => {
             // When user selects a place, we can replace the keyword without request data from API
             // by setting the second parameter to "false"
+            // console.log('des:', description)
             setValue(description, false);
             clearSuggestions();
 
@@ -46,7 +49,7 @@ function OrderForm3(props) {
                 )
                 .then(({ lat, lng }) => {
                     console.log("📍 Coordinates: ", { lat, lng });
-                    onSelectedDestPos({
+                    onSelectedReceiverPos({
                         lat: lat,
                         lng: lng
                     })
@@ -63,8 +66,6 @@ function OrderForm3(props) {
 
     const onSearch = (searchText) => {
         console.log('on search: ' + searchText)
-
-        // while(status !== 'OK') {}
 
         console.log('data:' + data)
         const list = data.map(
@@ -91,6 +92,8 @@ function OrderForm3(props) {
         setOptions(!searchText? []: list)
     }
 
+
+
     // DidMount
     useEffect(() => {
 
@@ -100,14 +103,22 @@ function OrderForm3(props) {
         const {location: {state}} = history
         console.log(state)
 
-        // note: go back
-        if(state !== '2' && state !== '4') {
-            history.goBack()
-        }
+        // if(!state){
+        //     history.goBack()
+        // }
+
     }, [])
 
+
+    // DidUpdate
+    useEffect(() => {
+        if(status === 'OK') {
+            onSearch(document.getElementById('receiver-autocomplete').value)
+        }
+    }, [status])
+
     const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
+        <Form.Item name="receiver_phone_prefix" noStyle>
             <Select style={{ width: 70 }}>
                 <Option value="1">+1</Option>
                 <Option value="86">+86</Option>
@@ -115,13 +126,24 @@ function OrderForm3(props) {
         </Form.Item>
     );
 
-    const onClickNext = () => {
-        // upload the form data to CreateOrder
+
+    const onClickNext = (values) => {
+
+        const newInfo = assignIn(info, values)
+        setInfo(newInfo)
+
+        console.log(newInfo)
         history.push('/create-order/page/4','3')
     }
 
     const onClickPrevious = ()=> {
 
+        const values = form.getFieldsValue(true)
+        console.log(values)
+
+        // const newInfo = assignIn(info, values)
+        // setInfo(newInfo)
+        //
         history.goBack()
     }
 
@@ -129,21 +151,21 @@ function OrderForm3(props) {
         <div>
 
             <Form
-                initialValues={{
-                    prefix: '1',
-                }}
+                initialValues={info}
+                onFinish={onClickNext}
                 scrollToFirstError
+                form={form}
             >
 
                 <Form.Item
-                    name="firstname"
+                    name="receiver_first_name"
                     label="First Name"
-                    // tooltip="What do you want others to call you?"
                     rules={
                         [{
                             required: true,
-                            message: 'Please input your first name!',
-                            whitespace: true
+                            message: "Receipt's first name cannot be empty!",
+                            whitespace: true,
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
@@ -152,14 +174,14 @@ function OrderForm3(props) {
 
 
                 <Form.Item
-                    name="lastname"
+                    name="receiver_last_name"
                     label="Last Name"
-                    // tooltip="What do you want others to call you?"
                     rules={
                         [{
                             required: true,
-                            message: 'Please input your last name!',
-                            whitespace: true
+                            message: "Receipt's last name cannot be empty!",
+                            whitespace: true,
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
@@ -167,9 +189,8 @@ function OrderForm3(props) {
                 </Form.Item>
 
                 <Form.Item
-                    name="middlename"
+                    name="receiver_middle_name"
                     label="Middle Name"
-                    // tooltip="What do you want others to call you?"
                     rules={
                         [{
                             required: false,
@@ -180,84 +201,69 @@ function OrderForm3(props) {
                 </Form.Item>
 
                 <Form.Item
-                    name="phone"
+                    name="receiver_phone_number"
                     label="Phone Number"
                     rules={
                         [{
                             required: true,
-                            message: 'Please input your phone number!'
+                            message: "Receipt's phone number cannot be empty!",
+                            type:'integer',
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
-                    <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
+                    <InputNumber addonBefore={prefixSelector} style={{width: '100%'}}/>
                 </Form.Item>
 
                 <Form.Item
-                    name="address"
+                    name="receiver_address"
                     label="Address"
                     rules={
                         [{
                             required: true,
-                            message: 'Please input your Address!'
+                            message: "Receipt's address cannot be empty!",
+                            whitespace: true,
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
-                    {/*<div ref={ref}>*/}
-                    {/*    <Input*/}
-                    {/*        value={value}*/}
-                    {/*        onChange={handleInput}*/}
-                    {/*        disabled={!ready}*/}
-                    {/*        placeholder="Please Input your Address"*/}
-                    {/*    />*/}
-                    {/*    {status === "OK" && <menu>{renderSuggestions()}</menu>}*/}
-                    {/*</div>*/}
-                    <div ref={ref}>
-
-                        {/*{ status === 'OK' &&*/}
-                        <AutoComplete
-                            id={'autocomplete'}
-                            value={value}
-                            options={options}
-                            disabled={!ready}
-                            // onSelect={onSelect}
-                            onSearch={onSearch}
-                            onChange={onChange}
-                        >
-
-                        </AutoComplete>
-                        {/*}*/}
-
-                    </div>
+                    <AutoComplete
+                        id='receiver-autocomplete'
+                        options={options}
+                        disabled={!ready}
+                        onSearch={onSearch}
+                        onChange={onChange}
+                    >
+                        {value}
+                    </AutoComplete>
 
                 </Form.Item>
 
+                <Form.Item>
+                    <Row justify={'space-between'}>
+
+                        <Col>
+                            <Button
+                                type={'default'}
+                                shape={'round'}
+                                onClick={onClickPrevious}
+                            >
+                                <LeftCircleOutlined />Return
+                            </Button>
+                        </Col>
+
+                        <Col>
+                            <Button
+                                type={'primary'}
+                                shape={'round'}
+                                htmlType={'submit'}
+                            >
+                                Next<RightCircleOutlined />
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form.Item>
             </Form>
-
-
-            <Row justify={'space-between'}>
-                <Col>
-                    <Button
-                        type={'default'}
-                        // href='/create-order/page/2'
-                        onClick={onClickPrevious}
-                        shape={'round'}
-                    >
-                        <LeftCircleOutlined />Return
-                    </Button>
-                </Col>
-
-                <Col >
-                    <Button
-                        type={'primary'}
-                        // href='/create-order/page/4'
-                        onClick={onClickNext}
-                        shape={'round'}
-                    >
-                        Next<RightCircleOutlined />
-                    </Button>
-                </Col>
-
-            </Row>
         </div>
 
 
