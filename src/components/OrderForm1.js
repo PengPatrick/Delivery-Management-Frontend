@@ -15,15 +15,19 @@ import usePlacesAutocomplete, {getGeocode, getLatLng,} from "use-places-autocomp
 import useOnclickOutside from "react-cool-onclickoutside";
 import {POSITIONS} from "../constants";
 import {LeftCircleOutlined, RightCircleOutlined} from "@ant-design/icons";
-
+import {useHistory} from "react-router-dom";
+import {assignIn} from "lodash/object";
 
 const { Option } = Select;
 
 function OrderForm1(props) {
 
-    const {onSelectedSenderPos, setHighlightedStation} = props
+    const {onSelectedSenderPos, setHighlightedStation, info, setInfo} = props
     const [options, setOptions] = useState([])
 
+
+    const history = useHistory()
+    // att: is a state?
     const {
         ready,
         value,
@@ -49,12 +53,16 @@ function OrderForm1(props) {
         setValue(e.target.value);
     };
 
-    const handleSelect = ({ description }) =>
+    const handleSelect = ({ description}) =>
         () => {
             // When user selects a place, we can replace the keyword without request data from API
             // by setting the second parameter to "false"
+            console.log('des:', description)
             setValue(description, false);
             clearSuggestions();
+
+            // document.getElementById('autocomplete').value = description
+            // setAddressValue(description)
 
             // Get latitude and longitude via utility functions
             getGeocode({ address: description })
@@ -125,6 +133,21 @@ function OrderForm1(props) {
 
 
 
+    // DidMount
+    useEffect(() => {
+
+        console.log('Form 1 did mount.')
+        console.log(history)
+
+        const {location: {state}} = history
+        console.log(state)
+
+        // if(!state){
+        //     history.goBack()
+        // }
+
+    }, [])
+
 
     // DidUpdate
     useEffect(() => {
@@ -134,12 +157,23 @@ function OrderForm1(props) {
     }, [status])
 
 
-    const clickNext = () => {
+    const onClickNext = (values) => {
 
-        // upload the form data to CreateOrder
+        // 1. check require
+        // 2. setInfo
+        // 3. jump
+
+        // console.log(values)
+
+        // 2.
+        const newInfo = assignIn(info, values)
+        setInfo(newInfo)
+        // console.log('newInfo:', newInfo)
+
+        // 3.
+        history.push('/create-order/page/2','1')
 
     }
-
 
     const onSelectStation = (value, instance) => {
 
@@ -169,9 +203,8 @@ function OrderForm1(props) {
         <div>
 
             <Form
-                initialValues={{
-                    prefix: '1',
-                }}
+                initialValues={info}
+                onFinish={onClickNext}
                 scrollToFirstError
             >
 
@@ -251,23 +284,22 @@ function OrderForm1(props) {
                     {/*    />*/}
                     {/*    {status === "OK" && <menu>{renderSuggestions()}</menu>}*/}
                     {/*</div>*/}
-                    <div ref={ref}>
+                    {/*<div ref={ref}>*/}
 
                         {/*{ status === 'OK' &&*/}
                         <AutoComplete
                             id={'autocomplete'}
-                            value={value}
+                            // value={value}
                             options={options}
                             disabled={!ready}
-                            // onSelect={onSelect}
                             onSearch={onSearch}
                             onChange={onChange}
                         >
-
+                            {value}
                         </AutoComplete>
                         {/*}*/}
 
-                    </div>
+                    {/*</div>*/}
 
                 </Form.Item>
 
@@ -300,29 +332,34 @@ function OrderForm1(props) {
                     </Select>
 
                 </Form.Item>
+
+                <Form.Item>
+                    <Row justify={'space-between'}>
+
+                        <Col>
+                            <Button
+                                type={'default'}
+                                href='/home'
+                                shape={'round'}
+                            >
+                                <LeftCircleOutlined />Return
+                            </Button>
+                        </Col>
+
+                        <Col>
+                            <Button
+                                type={'primary'}
+                                // href='/create-order/page/2'
+                                shape={'round'}
+                                // onClick={onClickNext}
+                                htmlType={'submit'}
+                            >
+                                Next<RightCircleOutlined />
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form.Item>
             </Form>
-            <Row justify={'space-between'}>
-                <Col>
-                    <Button
-                        type={'default'}
-                        href='/home'
-                        shape={'round'}
-                    >
-                        <LeftCircleOutlined />Return
-                    </Button>
-                </Col>
-
-                <Col >
-                    <Button
-                        type={'primary'}
-                        href='/create-order/page/2'
-                        shape={'round'}
-                    >
-                        Next<RightCircleOutlined />
-                    </Button>
-                </Col>
-
-            </Row>
         </div>
 
 

@@ -1,24 +1,63 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Form, Select, Input, InputNumber, Button, Row, Col, Icon} from "antd";
 import {LeftCircleOutlined, RightCircleOutlined} from "@ant-design/icons";
+import {useHistory} from "react-router-dom";
+import {assignIn} from "lodash/object";
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 function OrderForm2(props) {
 
-    const {shipMethod} = props
+    const {shipMethod, info, setInfo} = props
+    const history = useHistory()
 
     // console.log(shipMethod)
+    const [form] = Form.useForm()
+
+    // DidMount
+    useEffect(() => {
+
+        console.log('Form 2 did mount.')
+        console.log(history)
+
+        const {location: {state}} = history
+        console.log(state)
+
+        // note: go back
+        if(state !== '1' && state !== '3') {
+            history.goBack()
+        }
+    }, [])
+
+    const onClickNext = (values) => {
+
+        const newInfo = assignIn(info, values)
+        setInfo(newInfo)
+
+        history.push('/create-order/page/3','2')
+    }
+
+    const onClickPrevious = ()=> {
+
+        const values = form.getFieldsValue(true)
+        console.log(values)
+
+        // const newInfo = assignIn(info, values)
+        // setInfo(newInfo)
+        //
+        // history.goBack()
+    }
+
     return (
         <div>
 
             <Form
                 colon={false}
-                initialValues={{
-                    method: {shipMethod}
-                }}
+                initialValues={info}
+                onFinish={onClickNext}
                 layout={"vertical"}
+                form={form}
             >
                 <Form.Item
                     name='method'
@@ -40,8 +79,10 @@ function OrderForm2(props) {
                     rules={[{
                         required: true,
                         message: 'Please input package weight!',
-                        whitespace: true
+                        whitespace: true,
+                        validateTrigger:'onBlur'
                     }]}
+
                 >
                     <InputNumber
                         // style={{
@@ -50,7 +91,7 @@ function OrderForm2(props) {
                         min={0}
                         defaultValue={0}
 
-                    /> KG
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -59,7 +100,8 @@ function OrderForm2(props) {
                     rules={[{
                         required: true,
                         message: 'Please input package length!',
-                        whitespace: true
+                        whitespace: true,
+                        validateTrigger:'onBlur'
                     }]}
                 >
                     <InputNumber
@@ -69,7 +111,7 @@ function OrderForm2(props) {
                         min={0}
                         defaultValue={0}
 
-                    /> cm
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -78,7 +120,8 @@ function OrderForm2(props) {
                     rules={[{
                         required: true,
                         message: 'Please input package width!',
-                        whitespace: true
+                        whitespace: true,
+                        validateTrigger:'onBlur'
                     }]}
                 >
                     <InputNumber
@@ -88,7 +131,7 @@ function OrderForm2(props) {
                         min={0}
                         defaultValue={0}
 
-                    /> cm
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -97,7 +140,9 @@ function OrderForm2(props) {
                     rules={[{
                         required: true,
                         message: 'Please input package height!',
-                        whitespace: true
+                        // whitespace: true,
+                        type: 'number',
+                        validateTrigger:'onBlur'
                     }]}
                 >
                     <InputNumber
@@ -107,7 +152,7 @@ function OrderForm2(props) {
                         min={0}
                         defaultValue={0}
 
-                    /> cm
+                    />
                 </Form.Item>
 
                 <Form.Item
@@ -118,30 +163,34 @@ function OrderForm2(props) {
 
                 </Form.Item>
 
+                <Form.Item>
+
+                    <Row justify={'space-between'}>
+                        <Col>
+                            <Button
+                                type={'default'}
+                                onClick={onClickPrevious}
+                                shape={'round'}
+                            >
+                                <LeftCircleOutlined />Previous
+                            </Button>
+                        </Col>
+
+                        <Col >
+                            <Button
+                                type={'primary'}
+                                htmlType={'submit'}
+                                // onClick={onClickNext}  att: do not add this event when using as a submit button
+                                shape={'round'}
+                            >
+                                Next<RightCircleOutlined />
+                            </Button>
+                        </Col>
+
+                    </Row>
+                </Form.Item>
             </Form>
 
-            <Row justify={'space-between'}>
-                <Col>
-                    <Button
-                        type={'default'}
-                        href='/create-order/page/1'
-                        shape={'round'}
-                    >
-                        <LeftCircleOutlined />Previous
-                    </Button>
-                </Col>
-
-                <Col >
-                    <Button
-                        type={'primary'}
-                        href='/create-order/page/3'
-                        shape={'round'}
-                    >
-                        Next<RightCircleOutlined />
-                    </Button>
-                </Col>
-
-            </Row>
 
         </div>
     );

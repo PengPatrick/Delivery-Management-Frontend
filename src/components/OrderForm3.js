@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {AutoComplete, Button, Col, Form, Input, Row, Select} from "antd";
 import {LeftCircleOutlined, RightCircleOutlined} from "@ant-design/icons";
 import usePlacesAutocomplete, {getGeocode, getLatLng} from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
+import {useHistory} from "react-router-dom";
 
 const { Option } = Select;
 
@@ -10,7 +11,7 @@ function OrderForm3(props) {
 
     const {onSelectedDestPos} = props
     const [options, setOptions] = useState([])
-
+    const history = useHistory()
 
     // note: autocomplete
     const {
@@ -90,6 +91,20 @@ function OrderForm3(props) {
         setOptions(!searchText? []: list)
     }
 
+    // DidMount
+    useEffect(() => {
+
+        console.log('Form 3 did mount.')
+        console.log(history)
+
+        const {location: {state}} = history
+        console.log(state)
+
+        // note: go back
+        if(state !== '2' && state !== '4') {
+            history.goBack()
+        }
+    }, [])
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -99,6 +114,16 @@ function OrderForm3(props) {
             </Select>
         </Form.Item>
     );
+
+    const onClickNext = () => {
+        // upload the form data to CreateOrder
+        history.push('/create-order/page/4','3')
+    }
+
+    const onClickPrevious = ()=> {
+
+        history.goBack()
+    }
 
     return (
         <div>
@@ -213,7 +238,8 @@ function OrderForm3(props) {
                 <Col>
                     <Button
                         type={'default'}
-                        href='/create-order/page/2'
+                        // href='/create-order/page/2'
+                        onClick={onClickPrevious}
                         shape={'round'}
                     >
                         <LeftCircleOutlined />Return
@@ -223,7 +249,8 @@ function OrderForm3(props) {
                 <Col >
                     <Button
                         type={'primary'}
-                        href='/create-order/page/4'
+                        // href='/create-order/page/4'
+                        onClick={onClickNext}
                         shape={'round'}
                     >
                         Next<RightCircleOutlined />
