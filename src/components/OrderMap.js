@@ -5,7 +5,7 @@ import {POSITIONS} from "../constants";
 
 const containerStyle = {
     width: '600px',
-    height: '550px'
+    height: '500px'
 };
 
 const robotIcon = {
