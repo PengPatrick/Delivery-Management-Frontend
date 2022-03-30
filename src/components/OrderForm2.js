@@ -123,10 +123,11 @@ function OrderForm2(props) {
             <Row justify={'space-between'}>
                 <Col>
                     <Button
+                        type={'default'}
                         href='/create-order/page/1'
-                        icon={<LeftCircleOutlined />}
+                        shape={'round'}
                     >
-                        Previous
+                        <LeftCircleOutlined />Previous
                     </Button>
                 </Col>
 
@@ -134,9 +135,6 @@ function OrderForm2(props) {
                     <Button
                         type={'primary'}
                         href='/create-order/page/3'
-                        style={{
-                            backgroundColor: 'black'
-                        }}
                         shape={'round'}
                     >
                         Next<RightCircleOutlined />
