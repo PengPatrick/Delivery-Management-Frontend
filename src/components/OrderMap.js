@@ -57,13 +57,13 @@ function OrderMap(props) {
     //     libraries: ["places"]
     // });
 
-    const {senderPos, center, highlightedStation, destPos} = props
+    const {senderPos, center, highlightedStation, receiverPos} = props
 
-    // DidUpdate:
-    useEffect( () => {
-
-
-    }, [props.senderPos])
+    // // DidUpdate:
+    // useEffect( () => {
+    //
+    //
+    // }, [props.senderPos])
 
 
     return (
@@ -118,12 +118,12 @@ function OrderMap(props) {
                     }
 
                     {
-                        Object.keys(destPos).length === 0?
+                        Object.keys(receiverPos).length === 0?
                             null
                             :
                             <Marker
                                 icon={userIcon}
-                                position={destPos}
+                                position={receiverPos}
                             />
                     }
                 </GoogleMap>

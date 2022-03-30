@@ -26,11 +26,16 @@ function CreateOrder(props) {
     })
     const [highlightedStation, setHighlightedStation] = useState(-1)
 
-    const [destPos, setDestPos] = useState({})
+    const [receiverPos, setReceiverPos] = useState({})
 
     const [info, setInfo] = useState({
-        'prefix': 1,
-        'ship_method': shipMethod
+        'sender_phone_prefix': 1,
+        'ship_method': shipMethod,
+        'weight':0,
+        'length':0,
+        'width':0,
+        'height':0,
+        'receiver_phone_prefix':1
     })
 
 
@@ -39,8 +44,8 @@ function CreateOrder(props) {
         setCenter(pos)
     }
 
-    const onSelectedDestPos = (pos) => {
-        setDestPos(pos);
+    const onSelectedReceiverPos = (pos) => {
+        setReceiverPos(pos);
         setCenter(pos)
     }
 
@@ -63,7 +68,6 @@ function CreateOrder(props) {
         return (
             isLoggedIn?
                 (<OrderForm2
-                    shipMethod={shipMethod}
                     info={info}
                     setInfo={setInfo}
                 />)
@@ -75,21 +79,11 @@ function CreateOrder(props) {
     const showPageThree = () => {
         return (
             isLoggedIn?
-                (
-                    <div>
-
-                        <OrderForm3
-                            onSelectedDestPos={onSelectedDestPos}
-                            info={info}
-                            setInfo={setInfo}
-                        />
-                        {/*<OrderMap*/}
-                        {/*    senderPos={senderPos}*/}
-                        {/*    center={center}*/}
-                        {/*    highlightedStation={highlightedStation}*/}
-                        {/*    destPos={destPos}*/}
-                        {/*/>*/}
-                    </div>)
+                (<OrderForm3
+                    onSelectedReceiverPos={onSelectedReceiverPos}
+                    info={info}
+                    setInfo={setInfo}
+                />)
                 :
                 (<Redirect to="/home"/>)
         )
@@ -115,12 +109,13 @@ function CreateOrder(props) {
     // note: Did Update
     useEffect( () => {
         console.log('CreateOrder Did Update.')
-    }, [props, ])
+    }, [props])
 
     return (
     <div id='create-order'>
-        <Row gutter={16} justify={'center'}>
-            <Col span={10}>
+        <Row gutter={16} justify={'start'}>
+            <Col span={3}> </Col>
+            <Col span={8}>
                 <Switch>
                     <Route path='/create-order/page/1' render={showPageOne}/>
                     <Route path='/create-order/page/2' render={showPageTwo}/>
@@ -129,15 +124,16 @@ function CreateOrder(props) {
                 </Switch>
 
             </Col>
-
-            <Col span={10}>
+            <Col span={1}></Col>
+            <Col span={8}>
                 <OrderMap
                     senderPos={senderPos}
                     center={center}
                     highlightedStation={highlightedStation}
-                    destPos={destPos}
+                    receiverPos={receiverPos}
                 />
             </Col>
+            <Col span={3}> </Col>
         </Row>
 
     </div>

@@ -152,7 +152,7 @@ function OrderForm1(props) {
     // DidUpdate
     useEffect(() => {
         if(status === 'OK') {
-            onSearch(document.getElementById('autocomplete').value)
+            onSearch(document.getElementById('sender-autocomplete').value)
         }
     }, [status])
 
@@ -168,7 +168,7 @@ function OrderForm1(props) {
         // 2.
         const newInfo = assignIn(info, values)
         setInfo(newInfo)
-        // console.log('newInfo:', newInfo)
+        console.log('newInfo:', newInfo)
 
         // 3.
         history.push('/create-order/page/2','1')
@@ -191,7 +191,10 @@ function OrderForm1(props) {
     }
 
     const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
+        <Form.Item
+            name="sender_phone_prefix"
+            noStyle
+        >
             <Select style={{ width: 70 }}>
                 <Option value="1">+1</Option>
                 <Option value="86">+86</Option>
@@ -209,14 +212,15 @@ function OrderForm1(props) {
             >
 
                 <Form.Item
-                    name="firstname"
+                    name="sender_first_name"
                     label="First Name"
                     // tooltip="What do you want others to call you?"
                     rules={
                         [{
                             required: true,
                             message: 'Please input your first name!',
-                            whitespace: true
+                            whitespace: true,
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
@@ -225,14 +229,15 @@ function OrderForm1(props) {
 
 
                 <Form.Item
-                    name="lastname"
+                    name="sender_last_name"
                     label="Last Name"
                     // tooltip="What do you want others to call you?"
                     rules={
                         [{
                             required: true,
                             message: 'Please input your last name!',
-                            whitespace: true
+                            whitespace: true,
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
@@ -240,7 +245,7 @@ function OrderForm1(props) {
                 </Form.Item>
 
                 <Form.Item
-                    name="middlename"
+                    name="sender_middle_name"
                     label="Middle Name"
                     // tooltip="What do you want others to call you?"
                     rules={
@@ -253,25 +258,29 @@ function OrderForm1(props) {
                 </Form.Item>
 
                 <Form.Item
-                    name="phone"
+                    name="sender_phone_number"
                     label="Phone Number"
                     rules={
                         [{
                             required: true,
-                            message: 'Please input your phone number!'
+                            message: 'Please input your phone number!',
+                            type:'integer',  // todo: customize validator for this field: please input a number?
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
-                    <Input addonBefore={prefixSelector} style={{width: '100%'}}/>
+                    <InputNumber addonBefore={prefixSelector} style={{width: '100%'}}/>
                 </Form.Item>
 
                 <Form.Item
-                    name="address"
+                    name="sender_address"
                     label="Address"
                     rules={
                         [{
                             required: true,
-                            message: 'Please input your Address!'
+                            message: 'Please input your Address!',
+                            whitespace: true,  // att: only works for string type, no char means undefined, will be forbidden by required field
+                            validateTrigger: 'onBlur'
                         }]
                     }
                 >
@@ -288,7 +297,7 @@ function OrderForm1(props) {
 
                         {/*{ status === 'OK' &&*/}
                         <AutoComplete
-                            id={'autocomplete'}
+                            id={'sender-autocomplete'}
                             // value={value}
                             options={options}
                             disabled={!ready}
@@ -304,12 +313,14 @@ function OrderForm1(props) {
                 </Form.Item>
 
                 <Form.Item
-                    name="src_address"
+                    name="station"
                     label="Station"
                     rules={
                         [{
                             required: true,
-                            message: 'Please Select a Station from the list!'
+                            message: 'Please Select a Station from the list!',
+                            whitespace: true,
+                            validateTrigger: 'onBlur'
                         }]
                     }
 

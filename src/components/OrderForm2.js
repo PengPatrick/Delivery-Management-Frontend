@@ -9,7 +9,7 @@ const { TextArea } = Input;
 
 function OrderForm2(props) {
 
-    const {shipMethod, info, setInfo} = props
+    const {info, setInfo} = props
     const history = useHistory()
 
     // console.log(shipMethod)
@@ -35,6 +35,7 @@ function OrderForm2(props) {
         const newInfo = assignIn(info, values)
         setInfo(newInfo)
 
+        console.log(newInfo)
         history.push('/create-order/page/3','2')
     }
 
@@ -46,7 +47,7 @@ function OrderForm2(props) {
         // const newInfo = assignIn(info, values)
         // setInfo(newInfo)
         //
-        // history.goBack()
+        history.goBack()
     }
 
     return (
@@ -56,104 +57,128 @@ function OrderForm2(props) {
                 colon={false}
                 initialValues={info}
                 onFinish={onClickNext}
-                layout={"vertical"}
+                // layout={"vertical"}
                 form={form}
             >
                 <Form.Item
-                    name='method'
+                    name='ship_method'
                     label='Ship Method'
                     // valuePropName={shipMethod}
                     // getValueProps={ ()=> {
                     //
                     // }}
                 >
-                    <Select disabled defaultValue={shipMethod}>
-                        <Option value={shipMethod}>{shipMethod}</Option>
+                    {/* att: how is fixed?*/}
+                    <Select disabled>
+                        <Option value={info['ship_method']}>{info['ship_method']}</Option>
                     </Select>
 
                 </Form.Item>
 
                 <Form.Item
-                    name='weight'
                     label='Weight'
-                    rules={[{
-                        required: true,
-                        message: 'Please input package weight!',
-                        whitespace: true,
-                        validateTrigger:'onBlur'
-                    }]}
-
+                    required
                 >
-                    <InputNumber
-                        // style={{
-                        //     width:500
-                        // }}
-                        min={0}
-                        defaultValue={0}
+                    <Form.Item
+                        name='weight'
+                        rules={[{
+                            required: true,
+                            message: 'Please input package weight!',
+                            type: 'number',
+                            whitespace: true,
+                            validateTrigger:'onBlur'
+                        }]}
+                        noStyle
+                    >
+                        <InputNumber
+                            // style={{
+                            //     width:500
+                            // }}
+                            min={0}
 
-                    />
+                        />
+                    </Form.Item>
+                    <span> kg </span>
+
                 </Form.Item>
 
                 <Form.Item
-                    name='length'
                     label='Length'
-                    rules={[{
-                        required: true,
-                        message: 'Please input package length!',
-                        whitespace: true,
-                        validateTrigger:'onBlur'
-                    }]}
+                    required
                 >
-                    <InputNumber
-                        // style={{
-                        //     width:500
-                        // }}
-                        min={0}
-                        defaultValue={0}
+                    <Form.Item
+                        name='length'
+                        rules={[{
+                            required: true,
+                            message: 'Please input package length!',
+                            type: 'number',
+                            whitespace: true,
+                            validateTrigger:'onBlur'
+                        }]}
+                        noStyle
+                    >
+                        <InputNumber
+                            // style={{
+                            //     width:500
+                            // }}
+                            min={0}
 
-                    />
+                        />
+                    </Form.Item>
+                    <span> cm</span>
                 </Form.Item>
 
                 <Form.Item
-                    name='width'
                     label='Width'
-                    rules={[{
-                        required: true,
-                        message: 'Please input package width!',
-                        whitespace: true,
-                        validateTrigger:'onBlur'
-                    }]}
+                    required
                 >
-                    <InputNumber
-                        // style={{
-                        //     width:500
-                        // }}
-                        min={0}
-                        defaultValue={0}
-
-                    />
+                    <Form.Item
+                        name='width'
+                        rules={[{
+                            required: true,
+                            message: 'Please input package width!',
+                            type: 'number',
+                            whitespace: true,
+                            validateTrigger:'onBlur'
+                        }]}
+                        noStyle
+                    >
+                        <InputNumber
+                            // style={{
+                            //     width:500
+                            // }}
+                            min={0}
+                        />
+                    </Form.Item>
+                    <span> cm</span>
                 </Form.Item>
 
                 <Form.Item
-                    name='height'
                     label='Height'
-                    rules={[{
-                        required: true,
-                        message: 'Please input package height!',
-                        // whitespace: true,
-                        type: 'number',
-                        validateTrigger:'onBlur'
-                    }]}
+                    required
                 >
-                    <InputNumber
-                        // style={{
-                        //     width:500
-                        // }}
-                        min={0}
-                        defaultValue={0}
+                    <Form.Item
+                        name='height'
+                        rules={[{
+                            required: true,
+                            message: 'Please input package height!',
+                            // whitespace: true,
+                            type: 'number',
+                            validateTrigger:'onBlur'
+                        }]}
+                        noStyle
+                    >
+                        <InputNumber
+                            // style={{
+                            //     width:500
+                            // }}
+                            min={0}
 
-                    />
+                        />
+                    </Form.Item>
+                    <span> cm</span>
                 </Form.Item>
+
 
                 <Form.Item
                     name='note'
@@ -169,8 +194,8 @@ function OrderForm2(props) {
                         <Col>
                             <Button
                                 type={'default'}
-                                onClick={onClickPrevious}
                                 shape={'round'}
+                                onClick={onClickPrevious}
                             >
                                 <LeftCircleOutlined />Previous
                             </Button>
