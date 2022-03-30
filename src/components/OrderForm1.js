@@ -14,15 +14,15 @@ import {
 import usePlacesAutocomplete, {getGeocode, getLatLng,} from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
 import {POSITIONS} from "../constants";
+import {LeftCircleOutlined, RightCircleOutlined} from "@ant-design/icons";
 
 
 const { Option } = Select;
 
 function OrderForm1(props) {
 
-    const {onSelectPos, setHighlightedStation} = props
+    const {onSelectedSenderPos, setHighlightedStation} = props
     const [options, setOptions] = useState([])
-    const [pageState, setPageState] = useState(1)
 
     const {
         ready,
@@ -62,7 +62,7 @@ function OrderForm1(props) {
                 )
                 .then(({ lat, lng }) => {
                     console.log("📍 Coordinates: ", { lat, lng });
-                    onSelectPos({
+                    onSelectedSenderPos({
                         lat: lat,
                         lng: lng
                     })
@@ -124,14 +124,7 @@ function OrderForm1(props) {
     }
 
 
-    const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select style={{ width: 70 }}>
-                <Option value="1">+1</Option>
-                <Option value="86">+86</Option>
-            </Select>
-        </Form.Item>
-    );
+
 
     // DidUpdate
     useEffect(() => {
@@ -162,6 +155,15 @@ function OrderForm1(props) {
         setHighlightedStation(key)
 
     }
+
+    const prefixSelector = (
+        <Form.Item name="prefix" noStyle>
+            <Select style={{ width: 70 }}>
+                <Option value="1">+1</Option>
+                <Option value="86">+86</Option>
+            </Select>
+        </Form.Item>
+    );
 
     return (
         <div>
@@ -299,13 +301,28 @@ function OrderForm1(props) {
 
                 </Form.Item>
             </Form>
-            <Button
-                href='/create-order/page/2'
-                onClick={clickNext}
-            >
+            <Row justify={'space-between'}>
+                <Col>
+                    <Button
+                        type={'default'}
+                        href='/home'
+                        shape={'round'}
+                    >
+                        <LeftCircleOutlined />Return
+                    </Button>
+                </Col>
 
-                Next
-            </Button>
+                <Col >
+                    <Button
+                        type={'primary'}
+                        href='/create-order/page/2'
+                        shape={'round'}
+                    >
+                        Next<RightCircleOutlined />
+                    </Button>
+                </Col>
+
+            </Row>
         </div>
 
 

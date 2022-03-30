@@ -5,7 +5,7 @@ import {POSITIONS} from "../constants";
 
 const containerStyle = {
     width: '600px',
-    height: '550px'
+    height: '500px'
 };
 
 const robotIcon = {
@@ -57,7 +57,7 @@ function OrderMap(props) {
     //     libraries: ["places"]
     // });
 
-    const {senderPos, center, highlightedStation} = props
+    const {senderPos, center, highlightedStation, destPos} = props
 
     // DidUpdate:
     useEffect( () => {
@@ -114,6 +114,16 @@ function OrderMap(props) {
                             <Marker
                                 icon={userIcon}
                                 position={senderPos}
+                            />
+                    }
+
+                    {
+                        Object.keys(destPos).length === 0?
+                            null
+                            :
+                            <Marker
+                                icon={userIcon}
+                                position={destPos}
                             />
                     }
                 </GoogleMap>

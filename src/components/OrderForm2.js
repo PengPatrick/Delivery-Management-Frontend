@@ -1,5 +1,6 @@
 import React from 'react';
-import {Form, Select, Input, InputNumber} from "antd";
+import {Form, Select, Input, InputNumber, Button, Row, Col, Icon} from "antd";
+import {LeftCircleOutlined, RightCircleOutlined} from "@ant-design/icons";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -13,17 +14,19 @@ function OrderForm2(props) {
         <div>
 
             <Form
+                colon={false}
                 initialValues={{
                     method: {shipMethod}
                 }}
+                layout={"vertical"}
             >
                 <Form.Item
                     name='method'
                     label='Ship Method'
                     // valuePropName={shipMethod}
-                    getValueProps={ ()=> {
-
-                    }}
+                    // getValueProps={ ()=> {
+                    //
+                    // }}
                 >
                     <Select disabled defaultValue={shipMethod}>
                         <Option value={shipMethod}>{shipMethod}</Option>
@@ -34,7 +37,11 @@ function OrderForm2(props) {
                 <Form.Item
                     name='weight'
                     label='Weight'
-
+                    rules={[{
+                        required: true,
+                        message: 'Please input package weight!',
+                        whitespace: true
+                    }]}
                 >
                     <InputNumber
                         // style={{
@@ -49,7 +56,11 @@ function OrderForm2(props) {
                 <Form.Item
                     name='length'
                     label='Length'
-
+                    rules={[{
+                        required: true,
+                        message: 'Please input package length!',
+                        whitespace: true
+                    }]}
                 >
                     <InputNumber
                         // style={{
@@ -64,7 +75,11 @@ function OrderForm2(props) {
                 <Form.Item
                     name='width'
                     label='Width'
-
+                    rules={[{
+                        required: true,
+                        message: 'Please input package width!',
+                        whitespace: true
+                    }]}
                 >
                     <InputNumber
                         // style={{
@@ -79,7 +94,11 @@ function OrderForm2(props) {
                 <Form.Item
                     name='height'
                     label='Height'
-
+                    rules={[{
+                        required: true,
+                        message: 'Please input package height!',
+                        whitespace: true
+                    }]}
                 >
                     <InputNumber
                         // style={{
@@ -101,6 +120,28 @@ function OrderForm2(props) {
 
             </Form>
 
+            <Row justify={'space-between'}>
+                <Col>
+                    <Button
+                        type={'default'}
+                        href='/create-order/page/1'
+                        shape={'round'}
+                    >
+                        <LeftCircleOutlined />Previous
+                    </Button>
+                </Col>
+
+                <Col >
+                    <Button
+                        type={'primary'}
+                        href='/create-order/page/3'
+                        shape={'round'}
+                    >
+                        Next<RightCircleOutlined />
+                    </Button>
+                </Col>
+
+            </Row>
 
         </div>
     );

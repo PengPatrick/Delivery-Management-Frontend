@@ -16,6 +16,8 @@ function CreateOrder(props) {
     })
     const [highlightedStation, setHighlightedStation] = useState(-1)
 
+    const [destPos, setDestPos] = useState({})
+
     // todo: login status from main
     // const {isLoggedIn} = props
     // todo: fake loggedIn Status
@@ -25,17 +27,21 @@ function CreateOrder(props) {
     // const {shipMethod} = props
     const shipMethod = 'Robot'
 
-    const onSelectedNewPosition = (pos) => {
+    const onSelectedSenderPos = (pos) => {
         setSenderPos(pos);
         setCenter(pos)
     }
 
-    // console.log(window.google)
+    const onSelectedDestPos = (pos) => {
+        setDestPos(pos);
+        setCenter(pos)
+    }
+
 
     const showPageOne = () => {
         return (
             isLoggedIn?
-                (<OrderForm1 onSelectPos={onSelectedNewPosition} setHighlightedStation={setHighlightedStation}/>)
+                (<OrderForm1 onSelectedSenderPos={onSelectedSenderPos} setHighlightedStation={setHighlightedStation}/>)
                 :
                 (<Redirect to="/home"/>)
         )
@@ -53,7 +59,7 @@ function CreateOrder(props) {
     const showPageThree = () => {
         return (
             isLoggedIn?
-                (<OrderForm3 />)
+                (<OrderForm3 onSelectedDestPos={onSelectedDestPos}/>)
                 :
                 (<Redirect to="/home"/>)
         )
@@ -82,7 +88,12 @@ function CreateOrder(props) {
             </Col>
 
             <Col span={10}>
-                <OrderMap senderPos={senderPos} center={center} highlightedStation={highlightedStation}/>
+                <OrderMap
+                    senderPos={senderPos}
+                    center={center}
+                    highlightedStation={highlightedStation}
+                    destPos={destPos}
+                />
             </Col>
         </Row>
 
