@@ -52,7 +52,9 @@ function OrderForm2(props) {
 
     return (
         <div>
-
+            <div className={'sub-title'}>
+                Package Information
+            </div>
             <Form
                 colon={false}
                 initialValues={info}

@@ -6,6 +6,8 @@ import {Switch, Route, Redirect} from "react-router-dom";
 import OrderForm2 from './OrderForm2';
 import OrderForm3 from './OrderForm3';
 import OrderForm4 from './OrderForm4';
+import {POSITIONS} from "../constants";
+import OrderReview from "./OrderReview";
 
 function CreateOrder(props) {
 
@@ -24,7 +26,7 @@ function CreateOrder(props) {
             lat: 37.72380320461962,
             lng: -122.45591064927576
     })
-    const [highlightedStation, setHighlightedStation] = useState(-1)
+    const [station, setStation] = useState(-1)
 
     const [receiverPos, setReceiverPos] = useState({})
 
@@ -49,16 +51,38 @@ function CreateOrder(props) {
         setCenter(pos)
     }
 
+    const onSelectedStation = (key) => {
+        setStation(key)
+        setCenter(POSITIONS[key])
+    }
 
     const showPageOne = () => {
         return (
             isLoggedIn?
-                (<OrderForm1
-                    onSelectedSenderPos={onSelectedSenderPos}
-                    setHighlightedStation={setHighlightedStation}
-                    info={info}
-                    setInfo={setInfo}
-                />)
+                (
+                    <Row gutter={16} justify={'start'}>
+                        <Col span={2}> </Col>
+                        <Col span={10}>
+
+                            <OrderForm1
+                                onSelectedSenderPos={onSelectedSenderPos}
+                                onSelectedStation={onSelectedStation}
+                                info={info}
+                                setInfo={setInfo}
+                            />
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={8}>
+                            <OrderMap
+                                senderPos={senderPos}
+                                center={center}
+                                station={station}
+                                receiverPos={receiverPos}
+                            />
+                        </Col>
+                        {/*<Col span={3}> </Col>*/}
+                    </Row>
+               )
                 :
                 (<Redirect to="/home"/>)
         )
@@ -67,10 +91,28 @@ function CreateOrder(props) {
     const showPageTwo = () => {
         return (
             isLoggedIn?
-                (<OrderForm2
-                    info={info}
-                    setInfo={setInfo}
-                />)
+                (
+                    <Row gutter={16} justify={'start'}>
+                        <Col span={3}> </Col>
+                        <Col span={8}>
+
+                            <OrderForm2
+                                info={info}
+                                setInfo={setInfo}
+                            />
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={8}>
+                            <OrderMap
+                                senderPos={senderPos}
+                                center={center}
+                                station={station}
+                                receiverPos={receiverPos}
+                            />
+                        </Col>
+                        <Col span={3}> </Col>
+                    </Row>
+                )
                 :
                 (<Redirect to="/home"/>)
         )
@@ -79,23 +121,78 @@ function CreateOrder(props) {
     const showPageThree = () => {
         return (
             isLoggedIn?
-                (<OrderForm3
-                    onSelectedReceiverPos={onSelectedReceiverPos}
-                    info={info}
-                    setInfo={setInfo}
-                />)
+                (
+                    <Row gutter={16} justify={'start'}>
+                        <Col span={3}> </Col>
+                        <Col span={8}>
+
+                            <OrderForm3
+                                onSelectedReceiverPos={onSelectedReceiverPos}
+                                info={info}
+                                setInfo={setInfo}
+                            />
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={8}>
+                            <OrderMap
+                                senderPos={senderPos}
+                                center={center}
+                                station={station}
+                                receiverPos={receiverPos}
+                            />
+                        </Col>
+                        <Col span={3}> </Col>
+                    </Row>
+                )
                 :
                 (<Redirect to="/home"/>)
         )
     }
 
+
     const showPageFour = () => {
         return (
             isLoggedIn?
-                (<OrderForm4
-                    info={info}
-                    setInfo={setInfo}
-                />)
+                (
+                    <Row gutter={16} justify={'start'}>
+                        <Col span={3}> </Col>
+                        <Col span={8}>
+
+                            <OrderForm4
+                                info={info}
+                                setInfo={setInfo}
+                            />
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={8}>
+                            <OrderMap
+                                senderPos={senderPos}
+                                center={center}
+                                station={station}
+                                receiverPos={receiverPos}
+                            />
+                        </Col>
+                        <Col span={3}> </Col>
+                    </Row>
+                )
+                :
+                (<Redirect to="/home"/>)
+        )
+    }
+
+    const showReview = () => {
+        return (
+            isLoggedIn?
+                (
+                    <Row justify={'center'}>
+                        <Col span={20}>
+                            <OrderReview
+                                info={info}
+                                setInfo={setInfo}
+                            />
+                        </Col>
+                    </Row>
+                    )
                 :
                 (<Redirect to="/home"/>)
         )
@@ -113,28 +210,14 @@ function CreateOrder(props) {
 
     return (
     <div id='create-order'>
-        <Row gutter={16} justify={'start'}>
-            <Col span={3}> </Col>
-            <Col span={8}>
-                <Switch>
-                    <Route path='/create-order/page/1' render={showPageOne}/>
-                    <Route path='/create-order/page/2' render={showPageTwo}/>
-                    <Route path='/create-order/page/3' render={showPageThree}/>
-                    <Route path='/create-order/page/4' render={showPageFour}/>
-                </Switch>
 
-            </Col>
-            <Col span={1}></Col>
-            <Col span={8}>
-                <OrderMap
-                    senderPos={senderPos}
-                    center={center}
-                    highlightedStation={highlightedStation}
-                    receiverPos={receiverPos}
-                />
-            </Col>
-            <Col span={3}> </Col>
-        </Row>
+        <Switch>
+            <Route path='/create-order/page/1' render={showPageOne}/>
+            <Route path='/create-order/page/2' render={showPageTwo}/>
+            <Route path='/create-order/page/3' render={showPageThree}/>
+            <Route path='/create-order/page/4' render={showPageFour}/>
+            <Route path='/create-order/review' render={showReview}/>
+        </Switch>
 
     </div>
 

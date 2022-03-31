@@ -103,9 +103,10 @@ function OrderForm3(props) {
         const {location: {state}} = history
         console.log(state)
 
-        // if(!state){
-        //     history.goBack()
-        // }
+        // note: go back
+        if(state !== '2' && state !== '4') {
+            history.goBack()
+        }
 
     }, [])
 
@@ -116,6 +117,7 @@ function OrderForm3(props) {
             onSearch(document.getElementById('receiver-autocomplete').value)
         }
     }, [status])
+
 
     const prefixSelector = (
         <Form.Item name="receiver_phone_prefix" noStyle>
@@ -149,6 +151,9 @@ function OrderForm3(props) {
 
     return (
         <div>
+            <div className={'sub-title'}>
+                Receipt Information
+            </div>
 
             <Form
                 initialValues={info}
@@ -248,7 +253,7 @@ function OrderForm3(props) {
                                 shape={'round'}
                                 onClick={onClickPrevious}
                             >
-                                <LeftCircleOutlined />Return
+                                <LeftCircleOutlined />Previous
                             </Button>
                         </Col>
 

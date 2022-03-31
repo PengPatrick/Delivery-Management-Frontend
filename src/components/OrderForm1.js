@@ -3,13 +3,12 @@ import {
     Form,
     Input,
     InputNumber,
-    Cascader,
     Select,
     Row,
     Col,
     Checkbox,
     Button,
-    AutoComplete,
+    AutoComplete, Space,
 } from 'antd';
 import usePlacesAutocomplete, {getGeocode, getLatLng,} from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
@@ -22,7 +21,7 @@ const { Option } = Select;
 
 function OrderForm1(props) {
 
-    const {onSelectedSenderPos, setHighlightedStation, info, setInfo} = props
+    const {onSelectedSenderPos, onSelectedStation, info, setInfo} = props
     const [options, setOptions] = useState([])
 
 
@@ -163,8 +162,6 @@ function OrderForm1(props) {
         // 2. setInfo
         // 3. jump
 
-        // console.log(values)
-
         // 2.
         const newInfo = assignIn(info, values)
         setInfo(newInfo)
@@ -186,7 +183,8 @@ function OrderForm1(props) {
         key = parseInt(key)
 
         // console.log(typeof key)
-        setHighlightedStation(key)
+
+        onSelectedStation(key)
 
     }
 
@@ -204,6 +202,9 @@ function OrderForm1(props) {
 
     return (
         <div>
+            <div className={'sub-title'}>
+                Sender Information
+            </div>
 
             <Form
                 initialValues={info}

@@ -1,3 +1,17 @@
 #create-order {
     margin-top: 110px;
 }
+
+.sub-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.high-bold {
+
+    font-weight: 700;
+    font-size: 15px;
+    margin-left: 20px;
+}
+
